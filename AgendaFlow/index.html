@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgendaFlow</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">AgendaFlow</p>
+        <h1>Agendamento simples para servicos locais</h1>
+      </div>
+      <nav class="tabs" aria-label="Navegacao principal">
+        <button class="tab active" type="button" data-view="booking">Agendar</button>
+        <button class="tab" type="button" data-view="admin">Painel</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="view active" id="booking-view" aria-labelledby="booking-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Novo horario</p>
+            <h2 id="booking-title">Escolha o servico, profissional e horario</h2>
+          </div>
+          <p class="muted">Os dados ficam salvos neste navegador para facilitar o demo.</p>
+        </div>
+
+        <form class="booking-layout" id="booking-form">
+          <fieldset class="panel">
+            <legend>Servico</legend>
+            <div class="option-grid" id="service-options"></div>
+          </fieldset>
+
+          <fieldset class="panel">
+            <legend>Profissional</legend>
+            <div class="option-grid compact" id="professional-options"></div>
+          </fieldset>
+
+          <fieldset class="panel schedule-panel">
+            <legend>Horario</legend>
+            <label class="field">
+              <span>Data</span>
+              <input type="date" id="date-input" required />
+            </label>
+            <div class="slot-grid" id="slot-options"></div>
+          </fieldset>
+
+          <fieldset class="panel customer-panel">
+            <legend>Cliente</legend>
+            <label class="field">
+              <span>Nome</span>
+              <input type="text" id="customer-name" placeholder="Ex: Ana Souza" required />
+            </label>
+            <label class="field">
+              <span>Telefone</span>
+              <input type="tel" id="customer-phone" placeholder="(11) 99999-9999" required />
+            </label>
+            <label class="field">
+              <span>Observacao</span>
+              <textarea id="customer-notes" rows="4" placeholder="Preferencias, detalhes ou avisos"></textarea>
+            </label>
+            <button class="primary-action" type="submit">Confirmar agendamento</button>
+            <p class="form-message" id="booking-message" role="status"></p>
+          </fieldset>
+        </form>
+      </section>
+
+      <section class="view" id="admin-view" aria-labelledby="admin-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Operacao</p>
+            <h2 id="admin-title">Painel de agendamentos</h2>
+          </div>
+          <button class="secondary-action" type="button" id="reset-demo">Restaurar demo</button>
+        </div>
+
+        <div class="metric-row">
+          <article class="metric">
+            <span>Hoje</span>
+            <strong id="metric-today">0</strong>
+          </article>
+          <article class="metric">
+            <span>Confirmados</span>
+            <strong id="metric-confirmed">0</strong>
+          </article>
+          <article class="metric">
+            <span>Receita prevista</span>
+            <strong id="metric-revenue">R$ 0</strong>
+          </article>
+        </div>
+
+        <div class="toolbar">
+          <label class="field inline">
+            <span>Status</span>
+            <select id="status-filter">
+              <option value="all">Todos</option>
+              <option value="confirmed">Confirmados</option>
+              <option value="completed">Concluidos</option>
+              <option value="cancelled">Cancelados</option>
+            </select>
+          </label>
+          <label class="field inline">
+            <span>Buscar</span>
+            <input type="search" id="search-input" placeholder="Cliente, servico ou profissional" />
+          </label>
+        </div>
+
+        <div class="appointments" id="appointments-list"></div>
+      </section>
+    </main>
+
+    <script src="src/app.js"></script>
+  </body>
+</html>
