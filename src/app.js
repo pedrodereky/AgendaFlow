@@ -1,3 +1,7 @@
+// Regras puras (datas, escape, disponibilidade) ficam em src/logic.js,
+// carregado antes deste arquivo e testado em tests/logic.test.js.
+const { escapeHtml, toLocalISO, getTodayISO, addDays, isPastSlot, isSlotTaken } = window.AgendaLogic;
+
 const services = [
   {
     id: "haircut",
@@ -43,16 +47,6 @@ const state = {
   appointments: [],
 };
 
-// Texto digitado pelo usuário vai para o innerHTML; precisa ser escapado.
-function escapeHtml(value) {
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
 const money = new Intl.NumberFormat("pt-BR", {
   style: "currency",
   currency: "BRL",
@@ -84,24 +78,6 @@ const elements = {
   metricRevenue: document.querySelector("#metric-revenue"),
   resetDemo: document.querySelector("#reset-demo"),
 };
-
-// Datas no fuso do navegador. toISOString() usa UTC: no Brasil, depois das 21h,
-// "hoje" virava o dia seguinte.
-function toLocalISO(date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
-
-function getTodayISO() {
-  return toLocalISO(new Date());
-}
-
-function addDays(isoDate, days) {
-  const [year, month, day] = isoDate.split("-").map(Number);
-  return toLocalISO(new Date(year, month - 1, day + days));
-}
 
 function createDemoAppointments() {
   const today = getTodayISO();
@@ -200,21 +176,11 @@ function generateSlots() {
 }
 
 function isSlotBooked(time) {
-  return state.appointments.some(
-    (appointment) =>
-      appointment.date === elements.dateInput.value &&
-      appointment.time === time &&
-      appointment.professionalId === state.selectedProfessionalId &&
-      appointment.status !== "cancelled",
-  );
+  return isSlotTaken(state.appointments, elements.dateInput.value, time, state.selectedProfessionalId);
 }
 
-// Horário de hoje que já passou não pode ser agendado.
 function isSlotPast(time) {
-  if (elements.dateInput.value !== getTodayISO()) return false;
-  const [hour, minute] = time.split(":").map(Number);
-  const now = new Date();
-  return hour * 60 + minute <= now.getHours() * 60 + now.getMinutes();
+  return isPastSlot(elements.dateInput.value, time, new Date());
 }
 
 function isSlotUnavailable(time) {
