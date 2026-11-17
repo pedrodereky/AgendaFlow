@@ -288,8 +288,9 @@ function renderAppointments() {
           </div>
           <div class="appointment-actions">
             <span class="badge ${appointment.status}">${translateStatus(appointment.status)}</span>
+            ${appointment.status === "confirmed" ? `
             <button class="icon-action" type="button" title="Concluir" data-status-id="${appointment.id}" data-next-status="completed">✓</button>
-            <button class="icon-action" type="button" title="Cancelar" data-status-id="${appointment.id}" data-next-status="cancelled">×</button>
+            <button class="icon-action" type="button" title="Cancelar" data-status-id="${appointment.id}" data-next-status="cancelled">×</button>` : ""}
           </div>
         </article>
       `;
@@ -370,7 +371,8 @@ function createAppointment(event) {
 
 function updateAppointmentStatus(id, status) {
   state.appointments = state.appointments.map((appointment) => {
-    if (appointment.id !== id) {
+    // Só agendamentos confirmados mudam de status: concluído e cancelado são finais.
+    if (appointment.id !== id || appointment.status !== "confirmed") {
       return appointment;
     }
 
