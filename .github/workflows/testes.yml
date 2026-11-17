@@ -17,4 +17,4 @@ jobs:
         run: node --check src/logic.js && node --check src/app.js
       - name: Testes das regras
         # TZ fixo: os testes de data precisam valer em qualquer fuso.
-        run: TZ=America/Sao_Paulo node --test tests/
+        run: TZ=America/Sao_Paulo node --test "tests/**/*.test.js"
