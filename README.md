@@ -63,7 +63,10 @@ Ferramenta do navegador utilizada para salvar os dados localmente, permitindo qu
 
 ## Regras Implementadas
 
-* Impede horários duplicados;
+* Impede horários duplicados para o mesmo profissional;
+* Bloqueia horários de hoje que já passaram;
+* Concluído e cancelado são status finais;
+* Datas sempre no fuso local do navegador;
 * Organiza horários disponíveis automaticamente;
 * Atualiza os dados dinamicamente.
 
@@ -75,8 +78,11 @@ Ferramenta do navegador utilizada para salvar os dados localmente, permitindo qu
 .
 ├── index.html
 ├── src
-│   ├── app.js
+│   ├── logic.js      # regras puras: datas, escape de HTML, horários ocupados e passados
+│   ├── app.js        # interface: renderização, eventos e localStorage
 │   └── styles.css
+├── tests
+│   └── logic.test.js # testes das regras (node:test)
 └── README.md
 ```
 
@@ -87,6 +93,16 @@ Ferramenta do navegador utilizada para salvar os dados localmente, permitindo qu
 1. Baixe os arquivos do projeto;
 2. Abra o arquivo `index.html` no navegador;
 3. O sistema funcionará localmente sem necessidade de instalação adicional.
+
+## Testes
+
+As regras de `src/logic.js` têm testes com o executor nativo do Node (18+), sem dependências:
+
+```sh
+node --test "tests/**/*.test.js"
+```
+
+O GitHub Actions roda os testes em todo push e pull request.
 
 ---
 
