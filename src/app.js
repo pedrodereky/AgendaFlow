@@ -199,11 +199,23 @@ function isSlotBooked(time) {
   );
 }
 
+// Horário de hoje que já passou não pode ser agendado.
+function isSlotPast(time) {
+  if (elements.dateInput.value !== getTodayISO()) return false;
+  const [hour, minute] = time.split(":").map(Number);
+  const now = new Date();
+  return hour * 60 + minute <= now.getHours() * 60 + now.getMinutes();
+}
+
+function isSlotUnavailable(time) {
+  return isSlotBooked(time) || isSlotPast(time);
+}
+
 function renderSlots() {
   const selectedDate = elements.dateInput.value;
   elements.slotOptions.innerHTML = generateSlots()
     .map((time) => {
-      const booked = isSlotBooked(time);
+      const booked = isSlotUnavailable(time);
       const active = time === state.selectedSlot ? "active" : "";
       return `
         <button class="slot ${active}" type="button" data-slot="${time}" ${booked ? "disabled" : ""}>
@@ -328,7 +340,7 @@ function createAppointment(event) {
     return;
   }
 
-  if (isSlotBooked(state.selectedSlot)) {
+  if (isSlotUnavailable(state.selectedSlot)) {
     elements.message.textContent = "Esse horario acabou de ficar indisponivel.";
     renderSlots();
     return;
