@@ -147,7 +147,7 @@ function renderServices() {
     .map((service) => {
       const active = service.id === state.selectedServiceId ? "active" : "";
       return `
-        <button class="option-card ${active}" type="button" data-service-id="${service.id}">
+        <button class="option-card ${active}" type="button" data-service-id="${service.id}" aria-pressed="${active ? "true" : "false"}">
           <strong>${service.name}</strong>
           <span>${service.description}</span>
           <span>${service.duration} min · ${money.format(service.price)}</span>
@@ -162,7 +162,7 @@ function renderProfessionals() {
     .map((professional) => {
       const active = professional.id === state.selectedProfessionalId ? "active" : "";
       return `
-        <button class="option-card ${active}" type="button" data-professional-id="${professional.id}">
+        <button class="option-card ${active}" type="button" data-professional-id="${professional.id}" aria-pressed="${active ? "true" : "false"}">
           <strong>${professional.name}</strong>
           <span>${professional.specialty}</span>
         </button>
@@ -194,7 +194,7 @@ function renderSlots() {
       const booked = isSlotUnavailable(time);
       const active = time === state.selectedSlot ? "active" : "";
       return `
-        <button class="slot ${active}" type="button" data-slot="${time}" ${booked ? "disabled" : ""}>
+        <button class="slot ${active}" type="button" data-slot="${time}" aria-pressed="${active ? "true" : "false"}" ${booked ? `disabled aria-label="${time}, indisponível"` : ""}>
           ${time}
         </button>
       `;
@@ -265,8 +265,8 @@ function renderAppointments() {
           <div class="appointment-actions">
             <span class="badge ${appointment.status}">${translateStatus(appointment.status)}</span>
             ${appointment.status === "confirmed" ? `
-            <button class="icon-action" type="button" title="Concluir" data-status-id="${appointment.id}" data-next-status="completed">✓</button>
-            <button class="icon-action" type="button" title="Cancelar" data-status-id="${appointment.id}" data-next-status="cancelled">×</button>` : ""}
+            <button class="icon-action" type="button" title="Concluir" aria-label="Concluir agendamento de ${escapeHtml(appointment.customerName)}" data-status-id="${appointment.id}" data-next-status="completed">✓</button>
+            <button class="icon-action" type="button" title="Cancelar" aria-label="Cancelar agendamento de ${escapeHtml(appointment.customerName)}" data-status-id="${appointment.id}" data-next-status="cancelled">×</button>` : ""}
           </div>
         </article>
       `;
