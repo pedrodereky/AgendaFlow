@@ -1,4 +1,4 @@
-// node --test
+// node --test "tests/**/*.test.js"
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const { escapeHtml, toLocalISO, getTodayISO, addDays, isPastSlot, isSlotTaken } = require("../src/logic.js");
