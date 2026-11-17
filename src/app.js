@@ -136,8 +136,18 @@ function createDemoAppointments() {
 function loadAppointments() {
   const saved = localStorage.getItem(storeKey);
   if (saved) {
-    state.appointments = JSON.parse(saved);
-    return;
+    try {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) {
+        // Descarta registros que apontam para serviço ou profissional que não existe mais.
+        state.appointments = parsed.filter(
+          (appointment) => findService(appointment.serviceId) && findProfessional(appointment.professionalId),
+        );
+        return;
+      }
+    } catch (error) {
+      console.warn("Agendamentos salvos estavam corrompidos; usando os dados de demonstração.", error);
+    }
   }
 
   state.appointments = createDemoAppointments();
