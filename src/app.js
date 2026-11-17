@@ -43,6 +43,16 @@ const state = {
   appointments: [],
 };
 
+// Texto digitado pelo usuário vai para o innerHTML; precisa ser escapado.
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 const money = new Intl.NumberFormat("pt-BR", {
   style: "currency",
   currency: "BRL",
@@ -260,9 +270,9 @@ function renderAppointments() {
             <p>${service.name} · ${money.format(service.price)}</p>
           </div>
           <div>
-            <strong>${appointment.customerName}</strong>
-            <p>${professional.name} · ${appointment.customerPhone}</p>
-            ${appointment.notes ? `<p>${appointment.notes}</p>` : ""}
+            <strong>${escapeHtml(appointment.customerName)}</strong>
+            <p>${professional.name} · ${escapeHtml(appointment.customerPhone)}</p>
+            ${appointment.notes ? `<p>${escapeHtml(appointment.notes)}</p>` : ""}
           </div>
           <div class="appointment-actions">
             <span class="badge ${appointment.status}">${translateStatus(appointment.status)}</span>
